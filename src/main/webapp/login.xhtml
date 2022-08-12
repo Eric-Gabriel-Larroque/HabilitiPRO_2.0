@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+>
+<h:head>
+    <h:outputScript name="js/locale-primefaces.js"/>
+    <h:outputScript name="js/bootstrap.js"/>
+    <h:outputStylesheet name="css/styles.css"/>
+    <h:outputStylesheet name="css/bootstrap.min.css"/>
+    <link rel="shortcut icon" href="#{resource['img/favicon.ico']}" type="image/x-icon"/>
+    <title><ui:insert name="title">Login </ui:insert> - HabilitPro</title>
+</h:head>
+
+<h:body style="position: relative; height: 100vh; width: 100vw; display: flex; justify-content: center; align-items: center; flex-direction: column">
+    <p:graphicImage styleClass="img-logo" name="img/habilit_pro_logo.png" />
+
+    <p:messages style="width: 95%" id="messages" showDetail="true" showIcon="false" showSummary="false" closable="true">
+        <p:autoUpdate/>
+    </p:messages>
+
+    <h:form styleClass="flex text-center">
+
+        <h:panelGrid styleClass="panelGrid" columns="2" cellpadding="5">
+                <f:facet name="header">Login</f:facet>
+                <p:outputLabel for="email" styleClass="mb-4">E-mail:</p:outputLabel>
+                <p:inputText id="email"
+                             value="#{loginWebBean.login.email}"
+                             styleClass="form-control mb-4">
+                    <f:validator validatorId="com.senai.habilitpro.validator.EmailValidator"/>
+                </p:inputText>
+                <p:outputLabel for="senha">Senha:</p:outputLabel>
+                <p:password    id="senha"
+                               value="#{loginWebBean.login.senha}"
+                               styleClass="form-control"/>
+                    <f:facet name="footer" >
+                        <h:commandButton id="entrar"
+                                         value="ENTRAR"
+                                         styleClass="btn btn-success mt-4"
+                                         action="#{loginWebBean.login()}"/>
+                    </f:facet>
+        </h:panelGrid>
+    </h:form>
+</h:body>
+</html>

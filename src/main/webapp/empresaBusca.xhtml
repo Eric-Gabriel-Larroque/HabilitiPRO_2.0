@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+>
+    <ui:composition template="template/basic_layout.xhtml">
+        <ui:define name="title">Busca de Empresa</ui:define>
+        <ui:define name="content">
+            <h:form>
+
+                <p:messages id="messages" showDetail="true" showIcon="false" showSummary="false" closable="true" globalOnly="true">
+                    <p:autoUpdate/>
+                </p:messages>
+
+                <p:fieldset legend="Filtros Busca de Empresas" styleClass="col-lg-12 mb-2">
+                    <div class="form-group mb-3">
+                        <p:outputLabel for="id" styleClass="col-form-label" value="Id"/>
+                        <h:inputText id="id"
+                                     value="#{buscaEmpresaWebBean.filtro.id}" styleClass="form-control"/>
+                    </div>
+                    <div class="form-group mb-3">
+                        <p:outputLabel for="cnpj" styleClass="col-form-label" value="CNPJ"/>
+                        <p:inputMask size="14" mask="99.999.999/9999-99" id="cnpj"
+                                     value="#{buscaEmpresaWebBean.filtro.cnpj}"
+                                     styleClass="form-control">
+                            <f:validator validatorId="com.senai.habilitpro.validator.CnpjValidator"/>
+                        </p:inputMask>
+                    </div>
+                    <div class="form-group mb-3">
+                        <p:outputLabel for="nome" styleClass="col-form-label" value="Nome"/>
+                        <h:inputText id="nome"
+                                     value="#{buscaEmpresaWebBean.filtro.nome}" styleClass="form-control"/>
+                    </div>
+                    <div class="form-group mb-3">
+                        <p:outputLabel for="nomeFilial" styleClass="col-form-label" value="Nome da Filial"/>
+                        <p:inputText id="nomeFilial"
+                                     value="#{buscaEmpresaWebBean.filtro.nomeFilial}" styleClass="form-control"/>
+                    </div>
+                    <div class="form-group mb-3">
+                        <p:outputLabel for="selectSegmento" styleClass="col-form-label" value="Segmento"/><br/>
+                        <h:selectOneMenu id="selectSegmento"
+                                         value="#{buscaEmpresaWebBean.filtro.segmento}" styleClass="form-select">
+                            <f:selectItem itemLabel="--Selecione--" itemValue="#{null}" value="#{null}" />
+                            <f:selectItems value="#{buscaEmpresaWebBean.segmentos}"
+                                           var="segmento"
+                                           itemLabel="#{segmento.descricao}"
+                                           itemValue="#{segmento}"/>
+                            <f:ajax execute="@this"/>
+                            <f:ajax event="change" execute="@this" />
+                        </h:selectOneMenu>
+                    </div>
+                    <div class="form-group mb-3">
+                        <p:outputLabel for="selectRegional" styleClass="col-form-label" value="Regional"/><br/>
+                        <h:selectOneMenu id="selectRegional"
+                                         value="#{buscaEmpresaWebBean.filtro.regionalSenai}" styleClass="form-select">
+                            <f:selectItem itemLabel="--Selecione--" itemValue="#{null}" />
+                            <f:selectItems value="#{buscaEmpresaWebBean.regionais}"
+                                           var="regional"
+                                           itemLabel="#{regional.descricao}"
+                                           itemValue="#{regional}"/>
+                            <f:ajax execute="@this"/>
+                            <f:ajax event="change" render="@this" />
+                        </h:selectOneMenu>
+                    </div>
+                    <p:commandButton styleClass="btn btn-success" id="buscar" value="Buscar"
+                                     action="#{buscaEmpresaWebBean.buscar}" update="@form"/>
+                </p:fieldset>
+
+                <p:fieldset legend="Resultado da consulta" rendered="#{buscaEmpresaWebBean.buscaRealizada}">
+                    <p:dataTable id="empresasEncontradas"
+                                 value="#{buscaEmpresaWebBean.empresasEncontradas}"
+                                 var="empresa"
+                                 emptyMessage="Nenhuma empresa encontrada.">
+
+                        <p:column headerText="Id">
+                            <h:outputText value="#{empresa.id}"/>
+                        </p:column>
+
+                        <p:column headerText="Nome">
+                            <h:outputText value="#{empresa.nome}"/>
+                        </p:column>
+
+                        <p:column headerText="CNPJ">
+                            <h:outputText value="#{empresa.cnpj}"/>
+                        </p:column>
+
+                        <p:column headerText="Nome da Filial">
+                            <h:outputText value="#{empresa.nomeFilial != null ? empresa.nomeFilial : '-'}"/>
+                        </p:column>
+
+                        <p:column headerText="Segmento">
+                            <h:outputText value="#{empresa.segmento.descricao}"/>
+                        </p:column>
+
+                        <p:column headerText="Regional">
+                            <h:outputText value="#{empresa.regionalSenai.descricao}"/>
+                        </p:column>
+
+                        <p:column headerText="Supervisor">
+                            <h:outputText value="#{empresa.supervisor.nome}"/>
+                        </p:column>
+
+                        <p:column headerText="Cursos">
+                            <h:outputText value="#{empresa.cursos.size()}"/>
+                        </p:column>
+
+                    </p:dataTable>
+                </p:fieldset>
+
+            </h:form>
+        </ui:define>
+    </ui:composition>
+</html>

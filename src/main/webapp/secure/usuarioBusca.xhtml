@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://java.sun.com/jstl/core"
+>
+<ui:composition template="../template/basic_layout.xhtml">
+    <ui:define name="title">Busca de Usuários</ui:define>
+    <ui:define name="content">
+        <h:form>
+
+            <p:messages id="messages" showDetail="true" showIcon="false" showSummary="false" closable="true">
+                <p:autoUpdate/>
+            </p:messages>
+
+            <p:fieldset legend="Filtros Busca de Usuários" styleClass="col-lg-12 mb-2">
+                <div class="form-group mb-3">
+                    <p:outputLabel for="id" styleClass="col-form-label" value="Id"/>
+                    <h:inputText id="id" value="#{usuarioBuscaWebBean.usuarioFiltro.id}" styleClass="form-control"/>
+                </div>
+                <div class="form-group mb-3">
+                    <p:outputLabel for="cpf" styleClass="col-form-label" value="CPF"/>
+                    <p:inputMask size="14" mask="999.999.999-99" id="cpf"
+                                 value="#{usuarioBuscaWebBean.usuarioFiltro.cpf}"
+                                 styleClass="form-control">
+                        <f:validator validatorId="com.senai.habilitpro.validator.CpfValidator"/>
+                    </p:inputMask>
+                    <h:message for="cpf" styleClass="form-text text-danger"/>
+                </div>
+                <div class="form-group mb-3">
+                    <p:outputLabel for="nome" styleClass="col-form-label" value="Nome Usuário"/>
+                    <h:inputText id="nome" value="#{usuarioBuscaWebBean.usuarioFiltro.nome}" styleClass="form-control"/>
+                </div>
+                <div class="form-group mb-3">
+                    <p:outputLabel for="nomeEmpresa" styleClass="col-form-label" value="Nome da Empresa/Filial"/><br/>
+                    <p:autoComplete id="nomeEmpresa" scrollHeight="250"
+                                    emptyMessage="Nenhuma empresa encontrada com os critérios oferecidos"
+                                    var="empresa"
+                                    value="#{usuarioBuscaWebBean.usuarioFiltro.empresa}"
+                                    label=""
+                                    placeholder="Nome ou Id da Empresa"
+                                    itemLabel="#{empresa.nome}"
+                                    itemValue="#{empresa}"
+                                    converter="#{empresaConverter}"
+                                    forceSelection="true"
+                                    completeMethod="#{usuarioBuscaWebBean.autoCompleteEmpresa}">
+                        <p:ajax event="itemSelect" process="@this" global="false"/>
+                        <p:ajax event="clear" process="@this" global="false"/>
+                    </p:autoComplete>
+                </div>
+                <div class="form-group mb-3">
+                    <p:outputLabel for="role" styleClass="col-form-label" value="Tipo de Permissão"/>
+                    <p:selectManyCheckbox id="role"
+                                          value="#{usuarioBuscaWebBean.usuarioFiltro.roles}">
+                        <f:selectItems value="#{usuarioBuscaWebBean.roles}" var="role" itemValue="#{role}"
+                                       itemLabel="#{role.nome}"/>
+                    </p:selectManyCheckbox>
+                </div>
+                <h:commandButton styleClass="btn btn-success col-md-2 col-12" id="buscar" value="Buscar"
+                                 action="#{usuarioBuscaWebBean.filtrar}" update="@form"/>
+            </p:fieldset>
+
+            <p:fieldset legend="Resultado da consulta" rendered="#{usuarioBuscaWebBean.filtroRealizado}">
+                <p:dataTable id="usuariosEncontrados"
+                             value="#{usuarioBuscaWebBean.usuariosFiltrados}"
+                             var="usuario"
+                             emptyMessage="Nenhuma usuário encontrado.">
+
+                    <p:column headerText="Id">
+                        <h:outputText value="#{usuario.id}"/>
+                    </p:column>
+
+                    <p:column headerText="Nome">
+                        <h:outputText value="#{usuario.nome}"/>
+                    </p:column>
+
+                    <p:column headerText="CPF">
+                        <h:outputText value="#{usuario.cpf}"/>
+                    </p:column>
+
+                    <p:column headerText="Permissões">
+                        <ui:repeat value="#{usuario.roles}" var="role">
+                            <h:outputText value="#{role.nome}"/><br/>
+                        </ui:repeat>
+                    </p:column>
+
+                    <p:column headerText="Empresa">
+                        <h:outputText value="#{usuario.empresa.nome}"/>
+                    </p:column>
+
+                </p:dataTable>
+            </p:fieldset>
+
+        </h:form>
+    </ui:define>
+</ui:composition>
+</html>

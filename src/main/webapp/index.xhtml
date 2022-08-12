@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+>
+<ui:composition template="template/basic_layout.xhtml">
+    <ui:define name="title">Início</ui:define>
+    <ui:define name="content">
+        <h:panelGroup>
+            <h:form id="filtroAvaliacoes">
+
+                <p:messages id="messages" showDetail="true" showIcon="false" showSummary="false" closable="true">
+                    <p:autoUpdate/>
+                </p:messages>
+
+                <p:fieldset legend="Filtro Avaliações" styleClass="mb-3">
+                    <h:panelGroup class="row">
+                        <p:outputLabel for="statusAvaliacao"
+                                       styleClass="col-form-label col-12 col-sm-4 col-md-3 col-lg-2"
+                                       value="Status Avaliação"/>
+                        <h:panelGroup styleClass="col-12 col-sm-4 col-md-3 col-lg-2 mb-2">
+                            <h:selectOneMenu id="statusAvaliacao" value="#{indexWebBean.statusSelecionado}"
+                                             styleClass="form-select">
+                                <f:selectItem value="#{null}" itemLabel="Selecione..."/>
+                                <f:selectItems value="#{indexWebBean.statusList}" var="status"
+                                               itemLabel="#{status.descricao}" itemValue="#{status}"/>
+                            </h:selectOneMenu>
+                        </h:panelGroup>
+                        <h:panelGroup styleClass="col-12 col-sm-4 col-md-3 col-lg-2 mb-2">
+                            <h:commandButton styleClass="btn btn-success col-12" id="buscar" value="Filtrar"
+                                             action="#{indexWebBean.filtrar}" update="@form"/>
+                        </h:panelGroup>
+                        <p:outputLabel for="statusAvaliacao"
+                                       styleClass="col-form-label"
+                                       value="Filtre por um status para listar as avaliações"/>
+                    </h:panelGroup>
+                </p:fieldset>
+
+                <p:fieldset legend="Avaliações" rendered="#{indexWebBean.filtrou}">
+                    <p:dataTable id="avaliacoes"
+                                 value="#{indexWebBean.avaliacoes}"
+                                 var="avaliacao"
+                                 emptyMessage="Nenhuma avaliação encontrada.">
+
+                        <p:column headerText="Id">
+                            <h:outputText value="#{avaliacao.id}"/>
+                        </p:column>
+
+                        <p:column headerText="Empresa">
+                            <h:outputText value="#{avaliacao.nomeEmpresa}"/>
+                        </p:column>
+
+                        <p:column headerText="Curso">
+                            <h:outputText value="#{avaliacao.nomeCurso}"/>
+                        </p:column>
+
+                        <p:column headerText="Módulo">
+                            <h:outputText value="#{avaliacao.nomeModulo}"/>
+                        </p:column>
+
+                        <p:column headerText="Status">
+                            <h:outputText value="#{avaliacao.status.descricao}"/>
+                        </p:column>
+
+                        <p:column headerText="Ações">
+                            <h:outputLink value="/avaliacao.xhtml?id=#{avaliacao.id}"
+
+                                         styleClass="btn btn-primary">
+                                Avaliar
+                            </h:outputLink>
+                        </p:column>
+
+                    </p:dataTable>
+                </p:fieldset>
+            </h:form>
+        </h:panelGroup>
+    </ui:define>
+</ui:composition>
+</html>

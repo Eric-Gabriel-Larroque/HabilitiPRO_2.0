@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets" xmlns:p="http://java.sun.com/jsf/html"
+>
+<h:head>
+    <h:outputScript name="js/locale-primefaces.js"/>
+    <h:outputScript name="js/bootstrap.js"/>
+    <h:outputStylesheet name="css/styles.css"/>
+    <h:outputStylesheet name="css/bootstrap.min.css"/>
+    <link rel="shortcut icon" href="#{resource['img/favicon.ico']}" type="image/x-icon"/>
+    <title><ui:insert name="title">Page Title</ui:insert> - HabilitPro</title>
+</h:head>
+
+<h:body style="position: relative!important;min-height: 84vh!important;">
+    <div id="header">
+        <ui:include src="/template/basic_header.xhtml"/>
+    </div>
+    <div class="container" style="padding-bottom: 110px!important;">
+        <div id="content" class="body container-fluid justify-content-center">
+            <ui:insert name="content">
+                <ui:include src="/template/basic_content.xhtml"/>
+            </ui:insert>
+        </div>
+    </div>
+
+    <div id="footer">
+        <ui:include src="/template/basic_footer.xhtml"/>
+    </div>
+</h:body>
+</html>

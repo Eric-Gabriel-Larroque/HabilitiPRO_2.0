@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://java.sun.com/jstl/core"
+>
+<ui:composition template="template/basic_layout.xhtml">
+    <ui:define name="title">Busca de Trabalhadores</ui:define>
+    <ui:define name="content">
+        <h:form>
+
+            <p:messages id="messages" showDetail="true" showIcon="false" showSummary="false" closable="true">
+                <p:autoUpdate/>
+            </p:messages>
+
+            <p:fieldset legend="Filtros Busca de Trabalhadores" styleClass="col-lg-12 mb-2">
+                <div class="form-group mb-3">
+                    <p:outputLabel for="id" styleClass="col-form-label" value="Id"/>
+                    <h:inputText id="id"
+                                 value="#{trabalhadorBuscaWebBean.trabalhadorFiltro.id}"
+                                 styleClass="form-control"/>
+                </div>
+                <div class="form-group mb-3">
+                    <p:outputLabel for="cpf" styleClass="col-form-label" value="CPF"/>
+                    <p:inputMask size="14" mask="999.999.999-99" id="cpf"
+                                 value="#{trabalhadorBuscaWebBean.trabalhadorFiltro.cpf}"
+                                 styleClass="form-control">
+                        <f:validator validatorId="com.senai.habilitpro.validator.CpfValidator"/>
+                    </p:inputMask>
+                    <h:message for="cpf" styleClass="form-text text-danger"/>
+                </div>
+                <div class="form-group mb-3">
+                    <p:outputLabel for="nome" styleClass="col-form-label" value="Nome Trabalhadores"/>
+                    <h:inputText id="nome"
+                                 value="#{trabalhadorBuscaWebBean.trabalhadorFiltro.nome}"
+                                 styleClass="form-control"/>
+                </div>
+                <h:panelGroup class="form-group mb-3" rendered="#{indexWebBean.admin}">
+                    <p:outputLabel for="nomeEmpresa" styleClass="col-form-label" value="Nome da Empresa/Filial"/><br/>
+                    <p:autoComplete id="nomeEmpresa" scrollHeight="250"
+                                    emptyMessage="Nenhuma empresa encontrada com os critérios oferecidos"
+                                    var="empresa"
+                                    value="#{trabalhadorBuscaWebBean.trabalhadorFiltro.empresa}"
+                                    placeholder="Nome ou Id da Empresa"
+                                    itemLabel="#{empresa.nome}"
+                                    itemValue="#{empresa}"
+                                    converter="#{empresaConverter}"
+                                    forceSelection="true"
+                                    completeMethod="#{usuarioBuscaWebBean.autoCompleteEmpresa}">
+                        <p:ajax event="itemSelect" process="@this" global="false"/>
+                        <p:ajax event="clear" process="@this" global="false"/>
+                    </p:autoComplete>
+                </h:panelGroup>
+                <div class="form-group mb-3">
+                    <p:outputLabel for="funcao" styleClass="col-form-label" value="Função"/>
+                    <h:inputText id="funcao"
+                                 value="#{trabalhadorBuscaWebBean.trabalhadorFiltro.funcao}"
+                                 styleClass="form-control"/>
+                </div>
+                <div class="form-group mb-3">
+                    <p:outputLabel for="setor" styleClass="col-form-label" value="Setor"/>
+                    <h:inputText id="setor"
+                                 value="#{trabalhadorBuscaWebBean.trabalhadorFiltro.setor}"
+                                 styleClass="form-control"/>
+                </div>
+                <div class="form-group mb-3">
+                    <p:outputLabel for="cursos" styleClass="col-form-label" value="Cursos"/>
+                    <p:selectManyMenu id="cursos"
+                                      value="#{trabalhadorBuscaWebBean.trabalhadorFiltro.cursos}">
+                        <f:selectItems value="#{trabalhadorBuscaWebBean.cursos}" var="curso" itemValue="#{curso}"
+                                       itemLabel="#{curso.nome}"/>
+                    </p:selectManyMenu>
+                </div>
+                <h:commandButton styleClass="btn btn-success col-md-2 col-12" id="buscar" value="Buscar"
+                                 action="#{trabalhadorBuscaWebBean.filtrar}" update="@form"/>
+            </p:fieldset>
+
+            <p:fieldset legend="Resultado da consulta" rendered="#{trabalhadorBuscaWebBean.filtroRealizado}">
+                <p:dataTable id="trabalhadoresEncontrados"
+                             value="#{trabalhadorBuscaWebBean.trabalhadoresFiltrados}"
+                             var="trabalhador"
+                             emptyMessage="Nenhuma trabalhador encontrado.">
+
+                    <p:column headerText="Id">
+                        <h:outputText value="#{trabalhador.id}"/>
+                    </p:column>
+
+                    <p:column headerText="Nome">
+                        <h:outputText value="#{trabalhador.nome}"/>
+                    </p:column>
+
+                    <p:column headerText="CPF">
+                        <h:outputText value="#{trabalhador.cpf}"/>
+                    </p:column>
+
+                    <p:column headerText="Função">
+                        <h:outputText value="#{trabalhador.funcao}"/>
+                    </p:column>
+
+                    <p:column headerText="Setor">
+                        <h:outputText value="#{trabalhador.setor}"/>
+                    </p:column>
+
+                    <p:column headerText="Cursos">
+                        <ui:repeat var="curso" value="#{trabalhador.cursos}">
+                            <h:outputText value="#{curso.apelido}"/><br/>
+                        </ui:repeat>
+                    </p:column>
+
+                    <p:column headerText="Empresa">
+                        <h:outputText value="#{trabalhador.empresa.nome}"/>
+                    </p:column>
+
+                </p:dataTable>
+            </p:fieldset>
+
+        </h:form>
+    </ui:define>
+</ui:composition>
+</html>

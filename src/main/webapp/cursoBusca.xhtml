@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+>
+    <ui:composition template="template/basic_layout.xhtml">
+        <ui:define name="title">Busca de Curso</ui:define>
+        <ui:define name="content">
+            <h:form>
+
+                <p:messages id="messages" showDetail="true" showIcon="false" showSummary="false" closable="true">
+                    <p:autoUpdate/>
+                </p:messages>
+
+                <p:fieldset legend="Filtros Busca de Cursos" styleClass="col-lg-12 mb-2">
+                    <div class="form-group mb-3">
+                        <p:outputLabel for="id" styleClass="col-form-label" value="Id"/>
+                        <h:inputText id="id"
+                                     value="#{buscaCursoWebBean.filtro.id}" styleClass="form-control"/>
+                    </div>
+                    <div class="form-group mb-3">
+                        <p:outputLabel for="nome" styleClass="col-form-label" value="Nome"/>
+                        <h:inputText id="nome"
+                                     value="#{buscaCursoWebBean.filtro.nome}" styleClass="form-control"/>
+                    </div>
+                    <div class="form-group mb-3">
+                        <p:outputLabel for="ocupacao" styleClass="col-form-label" value="Ocupação"/>
+                        <h:inputText id="ocupacao"
+                                     value="#{buscaCursoWebBean.filtro.ocupacao}" styleClass="form-control"/>
+                    </div>
+                    <h:panelGroup class="form-group mb-3"
+                                  rendered="#{indexWebBean.isAdmin()}">
+                        <p:outputLabel for="selectEmpresa" styleClass="col-form-label" value="Empresa"/>
+                        <h:selectOneMenu id="selectEmpresa"
+                                         value="#{buscaCursoWebBean.filtro.idEmpresa}" styleClass="form-select">
+                            <f:selectItem itemLabel="--Selecione--" itemValue="#{null}"
+                                          rendered="#{buscaCursoWebBean.empresas.size() > 0}"/>
+                            <f:selectItems value="#{buscaCursoWebBean.empresas}"
+                                           var="empresa"
+                                           itemLabel="#{empresa.nome}"
+                                           itemValue="#{empresa.id}"/>
+                            <f:ajax execute="@this"/>
+                            <f:ajax event="change" render="@this" />
+                        </h:selectOneMenu>
+                    </h:panelGroup>
+                    <p:commandButton styleClass="btn btn-success" id="buscar" value="Buscar"
+                                     action="#{buscaCursoWebBean.buscar}" update="@form"/>
+                </p:fieldset>
+
+                <p:fieldset legend="Resultado da consulta" rendered="#{buscaCursoWebBean.buscaRealizada}">
+                    <p:dataTable id="cursosEncontrados"
+                                 value="#{buscaCursoWebBean.cursosEncontrados}"
+                                 var="curso"
+                                 emptyMessage="Nenhum curso encontrado.">
+
+                        <p:column headerText="Id">
+                            <h:outputText value="#{curso.id}"/>
+                        </p:column>
+
+                        <p:column headerText="Nome">
+                            <h:outputText value="#{curso.nome}"/>
+                        </p:column>
+
+                        <p:column headerText="Ocupação">
+                            <h:outputText value="#{curso.ocupacao}"/>
+                        </p:column>
+
+                        <p:column headerText="Empresa">
+                            <h:outputText value="#{curso.empresa.nome}"/>
+                        </p:column>
+
+                    </p:dataTable>
+                </p:fieldset>
+
+            </h:form>
+        </ui:define>
+    </ui:composition>
+</html>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+>
+    <ui:composition template="../template/basic_layout.xhtml">
+        <ui:define name="title">Cadastro Curso</ui:define>
+        <ui:define name="content">
+            <h:form styleClass="col-lg-10">
+
+                <p:messages id="messages" showDetail="true" showIcon="false" showSummary="false" closable="true">
+                    <p:autoUpdate/>
+                </p:messages>
+
+                <div class="form-group mb-3">
+                    <p:outputLabel for="ocupacao" styleClass="col-form-label" value="Ocupação"/>
+                    <h:inputText id="ocupacao" value="#{cursoCadastroWebBean.cursoDTO.ocupacao}" styleClass="form-control"/>
+                    <h:message for="ocupacao" styleClass="form-text text-danger"/>
+                </div>
+                <div class="form-group mb-3">
+                    <p:outputLabel for="selectEmpresa" styleClass="col-form-label" value="Empresa"/>
+                    <h:selectOneMenu id="selectEmpresa" value="#{cursoCadastroWebBean.cursoDTO.idEmpresa}" styleClass="form-select">
+                        <f:selectItem itemLabel="--Selecione--" itemValue="#{null}"
+                                      rendered="#{cursoCadastroWebBean.empresas.size() > 0}"/>
+                        <f:selectItems value="#{cursoCadastroWebBean.empresas}"
+                                       var="empresa"
+                                       itemLabel="#{empresa.nome}"
+                                       itemValue="#{empresa.id}"/>
+                        <f:ajax execute="@this"/>
+                        <f:ajax event="change" render="@this" />
+                    </h:selectOneMenu>
+                    <h:message for="selectEmpresa" styleClass="form-text text-danger"/>
+                </div>
+                <div class="form-group mb-3">
+                    <p:outputLabel for="descricao" styleClass="col-form-label" value="Descrição"/>
+                    <h:inputTextarea id="descricao" value="#{cursoCadastroWebBean.cursoDTO.descricao}" styleClass="form-control"/>
+                    <h:message for="descricao" styleClass="form-text text-danger"/>
+                </div>
+                <p:commandButton styleClass="btn btn-success" id="salvar" value="Salvar"
+                                 action="#{cursoCadastroWebBean.salvar}" update="@form"/>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+</html>

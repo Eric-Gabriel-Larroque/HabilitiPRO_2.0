@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://java.sun.com/jsf/html">
+    <nav class="fixed-top navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <h:graphicImage name="img/habilit_pro_logo.png" height="50"/>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="/index.xhtml">Home</a>
+                    </li>
+                    <p:outputLink rendered="#{indexWebBean.admin}">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="relatorios" role="button"
+                               data-bs-toggle="dropdown" aria-expanded="false">
+                                Relatórios
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="relatorios">
+                                <li>
+                                    <a class="dropdown-item" href="/secure/relatorioAvaliacoes.xhtml">Avaliações</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </p:outputLink>
+                    <h:panelGroup rendered="#{indexWebBean.admin}">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="usuarios" role="button"
+                               data-bs-toggle="dropdown" aria-expanded="false">
+                                Usuários
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="usuarios">
+                                <li><a class="dropdown-item" href="/secure/usuarioBusca.xhtml">Listar</a></li>
+                                <li>
+                                    <p:outputLink>
+                                        <a class="dropdown-item" href="/secure/usuarioCadastro.xhtml">Cadastrar Novo</a>
+                                    </p:outputLink>
+                                </li>
+                            </ul>
+                        </li>
+                    </h:panelGroup>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="empresas" role="button"
+                           data-bs-toggle="dropdown" aria-expanded="false">
+                            Empresas
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="empresas">
+                            <li><a class="dropdown-item" href="/empresaBusca.xhtml">Listar</a></li>
+                            <li>
+                                <p:outputLink rendered="#{indexWebBean.admin}">
+                                    <a class="dropdown-item" href="/secure/empresaCadastro.xhtml">Cadastrar Novo</a>
+                                </p:outputLink>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="trabalhadores" role="button"
+                           data-bs-toggle="dropdown" aria-expanded="false">
+                            Trabalhadores
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="trabalhadores">
+                            <li><a class="dropdown-item" href="/trabalhadorBusca.xhtml">Listar</a></li>
+                            <li>
+                                <p:outputLink rendered="#{indexWebBean.admin}">
+                                    <a class="dropdown-item" href="/secure/trabalhadorCadastro.xhtml">Cadastrar Novo</a>
+                                </p:outputLink>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="cursos" role="button" data-bs-toggle="dropdown"
+                           aria-expanded="false">
+                            Cursos
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="cursos">
+                            <li><a class="dropdown-item" href="/cursoBusca.xhtml">Listar</a></li>
+                            <li>
+                                <p:outputLink rendered="#{indexWebBean.admin}">
+                                    <a class="dropdown-item" href="/secure/cursoCadastro.xhtml">Cadastrar Novo</a>
+                                </p:outputLink>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <p:outputLink rendered="#{indexWebBean.admin}"><a class="nav-link dropdown-toggle" href="#"
+                                                                          id="modulos" role="button"
+                                                                          data-bs-toggle="dropdown"
+                                                                          aria-expanded="false">
+                            Módulos
+                        </a></p:outputLink>
+                        <ul class="dropdown-menu" aria-labelledby="modulos">
+                            <li><a class="dropdown-item" href="/secure/moduloCadastro.xhtml">Cadastrar Novo</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item end-100">
+                        <p:commandLink action="#{loginWebBean.logout()}" value="Logout" styleClass="nav-link">
+                            <f:ajax execute="@this"/>
+                        </p:commandLink>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</ui:composition>

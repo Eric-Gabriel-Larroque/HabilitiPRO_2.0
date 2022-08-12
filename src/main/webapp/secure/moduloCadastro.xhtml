@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+>
+    <ui:composition template="../template/basic_layout.xhtml">
+        <ui:define name="title">Cadastro Módulo</ui:define>
+        <ui:define name="content">
+            <h:form styleClass="col-lg-10">
+
+                <p:messages id="messages" showDetail="true" showIcon="false" showSummary="false" closable="true">
+                    <p:autoUpdate/>
+                </p:messages>
+
+                <div class="form-group mb-3">
+                    <p:outputLabel for="nome" styleClass="col-form-label" value="Nome"/>
+                    <h:inputText id="nome" value="#{moduloCadastroWebBean.moduloDTO.nome}" styleClass="form-control"/>
+                    <h:message for="nome" styleClass="form-text text-danger"/>
+                </div>
+
+                <div class="form-group mb-3">
+                    <p:outputLabel for="dataInicio" styleClass="col-form-label" value="Início"/><br/>
+                    <p:calendar id="dataInicio" value="#{moduloCadastroWebBean.moduloDTO.dataInicio}"
+                                locale="pt_BR" pattern="dd/MM/yyyy"
+                                mindate="#{now}"
+                                maxdate="#{moduloCadastroWebBean.moduloDTO.dataTermino}"
+                                mask="true">
+                        <p:ajax event="dateSelect" process="@this"/>
+                        <p:ajax event="change" process="@this"/>
+                        <p:ajax process="@this" update="dataTermino"/>
+                    </p:calendar><br/>
+                    <h:message for="dataInicio" styleClass="form-text text-danger"/>
+                </div>
+
+                <div class="form-group mb-3">
+                    <p:outputLabel for="dataTermino" styleClass="col-form-label" value="Término"/><br/>
+                    <p:calendar id="dataTermino"
+                                locale="pt_BR"
+                                pattern="dd/MM/yyyy"
+                                mindate="#{moduloCadastroWebBean.moduloDTO.dataInicio}"
+                                value="#{moduloCadastroWebBean.moduloDTO.dataTermino}"
+                                mask="true"
+                    >
+                        <p:ajax event="dateSelect" process="@this"/>
+                        <p:ajax event="change" process="@this"/>
+                        <p:ajax process="@this" update="dataInicio"/>
+                    </p:calendar><br/>
+                    <h:message for="dataTermino" styleClass="form-text text-danger"/>
+                </div>
+
+                <div class="form-group mb-3">
+                    <p:outputLabel for="selectCurso" styleClass="col-form-label" value="Curso"/>
+                    <h:selectOneMenu id="selectCurso" value="#{moduloCadastroWebBean.moduloDTO.idCurso}" styleClass="form-select">
+                        <f:selectItem itemLabel="--Selecione--" itemValue="#{null}"
+                                      rendered="#{moduloCadastroWebBean.cursos.size() > 0}"/>
+                        <f:selectItems value="#{moduloCadastroWebBean.cursos}"
+                                       var="curso"
+                                       itemLabel="#{curso.nome}"
+                                       itemValue="#{curso.id}"/>
+                        <f:ajax execute="@this"/>
+                        <f:ajax event="change" render="@this" />
+                    </h:selectOneMenu>
+                    <h:message for="selectCurso" styleClass="form-text text-danger"/>
+                </div>
+
+                <div class="form-group mb-2" style="display: flex; justify-content: space-between">
+                    <h:outputLabel for="habilidades" value="Habilidades" />
+                    <p:commandButton actionListener="#{moduloCadastroWebBean.addHabilidade()}"
+                                     update="habilidades removeHabilidade"
+                                     process="@this"
+                                     styleClass="btn-primary"
+                                     style="color: white; font-weight: bold; font-size: 1.0rem; border: none !important;"
+                                     value="+"
+                    />
+                </div>
+
+                <div class="form-group mb-1">
+                    <p:outputPanel id="habilidades">
+                            <ui:repeat value="#{moduloCadastroWebBean.moduloDTO.habilidades}" var="habilidade" varStatus="status">
+                                <h:inputText value="#{habilidade.nome}" id="habilidade" styleClass="form-control"/>
+                                <h:message for="habilidade" styleClass="form-text text-danger"/>
+                                <br/>
+                            </ui:repeat>
+                    </p:outputPanel>
+                </div>
+
+                <div class="form-group mb-2" style="display: flex; justify-content: flex-end; margin-top: -1rem">
+                    <p:outputPanel  id="removeHabilidade">
+                        <p:commandButton rendered="#{moduloCadastroWebBean.moduloDTO.habilidades.size() > 1}"
+                                         action="#{moduloCadastroWebBean.removerHabilidade()}"
+                                         update="habilidades removeHabilidade"
+                                         process="@this"
+                                         styleClass="btn-danger"
+                                         style="background-color: #ef3434; color: white; font-weight: bold; font-size: 1.1rem; border: none !important;"
+                                         value="-"
+                                         />
+                    </p:outputPanel>
+                </div>
+
+                <h:commandButton styleClass="btn btn-success mt-3" id="salvar" value="Salvar" process="@form"
+                                 action="#{moduloCadastroWebBean.salvar()}"/>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+</html>

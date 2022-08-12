@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+>
+<ui:composition template="../template/basic_layout.xhtml">
+    <ui:define name="title">Cadastro Empresa</ui:define>
+    <ui:define name="content">
+        <h:form styleClass="col-lg-10">
+
+            <p:messages id="messages" showDetail="true" showIcon="false" showSummary="false" closable="true">
+                <p:autoUpdate/>
+            </p:messages>
+
+            <div class="form-group mb-3">
+                <p:outputLabel for="nome" styleClass="col-form-label" value="Nome"/>
+                <h:inputText id="nome" value="#{empresaCadastroWebBean.empresa.nome}" styleClass="form-control"/>
+                <h:message for="nome" styleClass="form-text text-danger"/>
+            </div>
+                <div class="form-group mb-3">
+                    <p:outputLabel for="cnpj" styleClass="col-form-label" value="CNPJ"/>
+                    <p:inputMask size="14" mask="99.999.999/9999-99" id="cnpj"
+                                 value="#{empresaCadastroWebBean.empresa.cnpj}"
+                                 styleClass="form-control">
+                        <f:validator validatorId="com.senai.habilitpro.validator.CnpjValidator"/>
+                    </p:inputMask>
+                    <h:message for="cnpj" styleClass="form-text text-danger"/>
+                </div>
+            <div class="form-group mb-3">
+                <p:outputLabel for="selectIsFilial" styleClass="col-form-label" value="Filial"/>
+                <h:selectOneMenu id="selectIsFilial"
+                                 value="#{empresaCadastroWebBean.empresa.filial}" styleClass="form-select">
+                    <f:selectItem itemLabel="Sim" itemValue="#{true}"/>
+                    <f:selectItem itemLabel="Não" itemValue="#{false}"/>
+                    <f:ajax update="nomeFilial" execute="@this"/>
+                    <f:ajax event="change" render="nomeFilial" />
+                </h:selectOneMenu>
+                <p:outputLabel for="nomeFilial" styleClass="col-form-label" value="Nome da Filial"/>
+                <p:inputText id="nomeFilial" value="#{empresaCadastroWebBean.empresa.nomeFilial}" styleClass="form-control" disabled="#{empresaCadastroWebBean.empresa.filial != true}"/>
+            </div>
+
+            <div class="form-group mb-3">
+                <p:outputLabel for="selectSegmento" styleClass="col-form-label" value="Segmento"/><br/>
+                <h:selectOneMenu id="selectSegmento" value="#{empresaCadastroWebBean.empresa.segmento}" styleClass="form-select">
+                    <f:selectItem itemLabel="--Selecione--" itemValue="#{null}" value="#{null}" />
+                    <f:selectItems value="#{empresaCadastroWebBean.segmentos}"
+                                   var="segmento"
+                                   itemLabel="#{segmento.descricao}"
+                                   itemValue="#{segmento}"/>
+                    <f:ajax execute="@this"/>
+                    <f:ajax event="change" execute="@this" />
+                </h:selectOneMenu>
+                <h:message for="selectSegmento" styleClass="form-text text-danger"/>
+            </div>
+            <div class="form-group mb-3">
+                <p:outputLabel for="selectRegional" styleClass="col-form-label" value="Regional"/><br/>
+                <h:selectOneMenu id="selectRegional" value="#{empresaCadastroWebBean.empresa.regionalSenai}" styleClass="form-select">
+                    <f:selectItem itemLabel="--Selecione--" itemValue="#{null}" />
+                    <f:selectItems value="#{empresaCadastroWebBean.regionais}"
+                                   var="regional"
+                                   itemLabel="#{regional.descricao}"
+                                   itemValue="#{regional}"/>
+                    <f:ajax execute="@this"/>
+                    <f:ajax event="change" render="@this" />
+                </h:selectOneMenu>
+                <h:message for="selectRegional" styleClass="form-text text-danger"/>
+            </div>
+            <div class="form-group mb-3">
+                <p:outputLabel for="selectSupervisor" styleClass="col-form-label" value="Supervisor"/>
+                <h:selectOneMenu id="selectSupervisor" value="#{empresaCadastroWebBean.empresa.idUsuario}" styleClass="form-select">
+                    <f:selectItem itemLabel="--Selecione--" itemValue="#{null}"
+                                  rendered="#{empresaCadastroWebBean.usuarios.size() > 0}"/>
+                    <f:selectItems value="#{empresaCadastroWebBean.usuarios}"
+                                   var="usuario"
+                                   itemLabel="#{usuario.nome}"
+                                   itemValue="#{usuario.id}"/>
+                    <f:ajax execute="@this"/>
+                    <f:ajax event="change" render="@this" />
+                </h:selectOneMenu><br/>
+                <h:message for="selectSupervisor" styleClass="form-text text-danger"/>
+            </div>
+            <div class="form-group mb-3">
+                <p:outputLabel for="rua" styleClass="col-form-label" value="Rua"/>
+                <p:inputText id="rua" value="#{empresaCadastroWebBean.endereco.rua}" styleClass="form-control"/>
+                <h:message for="rua" styleClass="form-text text-danger"/>
+            </div>
+            <div class="form-group mb-3">
+                <p:outputLabel for="numero" styleClass="col-form-label" value="Número"/>
+                <p:inputText id="numero" value="#{empresaCadastroWebBean.endereco.numero}" styleClass="form-control"/>
+                <h:message for="rua" styleClass="form-text text-danger"/>
+            </div>
+            <div class="form-group mb-3">
+                <p:outputLabel for="bairro" styleClass="col-form-label" value="Bairro"/>
+                <p:inputText id="bairro" value="#{empresaCadastroWebBean.endereco.bairro}" styleClass="form-control"/>
+                <h:message for="bairro" styleClass="form-text text-danger"/>
+            </div>
+            <div class="form-group mb-3">
+                <p:outputLabel for="cidade" styleClass="col-form-label" value="Cidade"/>
+                <p:inputText id="cidade" value="#{empresaCadastroWebBean.endereco.cidade}" styleClass="form-control"/>
+                <h:message for="cidade" styleClass="form-text text-danger"/>
+            </div>
+            <div class="form-group mb-3">
+                <p:outputLabel for="estado" styleClass="col-form-label" value="Estado"/>
+                <p:inputText id="estado" value="#{empresaCadastroWebBean.endereco.estado}" styleClass="form-control"/>
+                <h:message for="estado" styleClass="form-text text-danger"/>
+            </div>
+            <div class="form-group mb-3">
+                <p:outputLabel for="pais" styleClass="col-form-label" value="País"/>
+                <p:inputText id="pais" value="#{empresaCadastroWebBean.endereco.pais}" styleClass="form-control"/>
+                <h:message for="pais" styleClass="form-text text-danger"/>
+            </div>
+            <p:commandButton styleClass="btn btn-success" id="salvar" value="Salvar"
+                             action="#{empresaCadastroWebBean.salvar}" update="@form"/>
+        </h:form>
+    </ui:define>
+</ui:composition>
+</html>

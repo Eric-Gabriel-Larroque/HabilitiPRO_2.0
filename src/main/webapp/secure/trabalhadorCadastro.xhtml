@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<ui:composition template="../template/basic_layout.xhtml">
+    <ui:define name="title">Cadastro Trabalhador</ui:define>
+    <ui:define name="content">
+
+        <h:form styleClass="col-lg-10">
+
+            <p:messages id="messages" showDetail="true" showIcon="false" showSummary="false" closable="true">
+                <p:autoUpdate/>
+            </p:messages>
+
+            <div class="form-group mb-3">
+                <p:outputLabel for="nome" styleClass="col-form-label" value="Nome"/>
+                <p:inputText id="nome" value="#{trabalhadorCadastroWebBean.trabalhadorDTO.nome}"
+                             styleClass="form-control"/>
+                <h:message for="nome" styleClass="form-text text-danger"/>
+            </div>
+            <div class="form-group mb-3">
+                <p:outputLabel for="cpf" styleClass="col-form-label" value="CPF"/>
+                <p:inputMask size="14" mask="999.999.999-99" id="cpf"
+                             value="#{trabalhadorCadastroWebBean.trabalhadorDTO.cpf}"
+                             styleClass="form-control">
+                    <f:validator validatorId="com.senai.habilitpro.validator.CpfValidator"/>
+                </p:inputMask>
+                <h:message for="cpf" styleClass="form-text text-danger"/>
+            </div>
+            <div class="form-group mb-3">
+                <p:outputLabel for="setor" styleClass="col-form-label" value="Setor"/>
+                <p:inputText id="setor" value="#{trabalhadorCadastroWebBean.trabalhadorDTO.setor}"
+                             styleClass="form-control"/>
+                <h:message for="setor" styleClass="form-text text-danger"/>
+            </div>
+            <div class="form-group mb-3">
+                <p:outputLabel for="funcao" styleClass="col-form-label" value="Função"/>
+                <p:inputText id="funcao" value="#{trabalhadorCadastroWebBean.trabalhadorDTO.funcao}"
+                             styleClass="form-control"/>
+                <h:message for="funcao" styleClass="form-text text-danger"/>
+            </div>
+            <div class="form-group mb-3">
+                <p:outputLabel for="alteracaoFuncao" styleClass="col-form-label" value="Ultima alteração função"/>
+                <br/>
+                <p:calendar id="alteracaoFuncao" value="#{trabalhadorCadastroWebBean.trabalhadorDTO.alteracaoFuncao}"
+                            locale="pt_BR" pattern="dd/MM/yyyy" maxdate="#{trabalhadorCadastroWebBean.dataAtual}"
+                            mask="true">
+                </p:calendar>
+                <h:message for="alteracaoFuncao" styleClass="form-text text-danger"/>
+            </div>
+            <div class="form-group mb-3">
+                <p:outputLabel for="empresas" styleClass="col-form-label" value="Empresa"/>
+                <h:selectOneMenu id="empresas" value="#{trabalhadorCadastroWebBean.trabalhadorDTO.idEmpresa}"
+                                 styleClass="form-select">
+                    <f:selectItem itemValue="#{null}" itemLabel="#{'Selecione'}" noSelectionOption="true" />
+                    <f:selectItems value="#{trabalhadorCadastroWebBean.empresaList}" var="empresa"
+                                   itemValue="#{empresa.id}"
+                                   itemLabel="#{empresa.nome}"/>
+                    <p:ajax event="change" render="cursos,empresaSemCurso,empresaNaoSelecionada" process="@this"
+                            update="divCursos"
+                            listener="#{trabalhadorCadastroWebBean.buscaByEmpresa()}"/>
+                </h:selectOneMenu>
+                <h:message for="empresas" styleClass="form-text text-danger"/>
+            </div>
+            <h:panelGroup styleClass="form-group mb-3" id="divCursos">
+                <p:outputLabel for="cursos" styleClass="col-form-label" value="Cursos"/>
+                <p:selectManyMenu id="empresaNaoSelecionada"
+                                 value="#{trabalhadorCadastroWebBean.trabalhadorDTO.idCursos}" styleClass="form-select"
+                                 rendered="#{trabalhadorCadastroWebBean.cursosByEmpresa.size() lt 1 and !trabalhadorCadastroWebBean.empresaSelecinada}">
+                    <f:selectItem itemDisabled="true" itemValue="#{null}" itemLabel="#{'Selecione uma empresa antes'}"/>
+                </p:selectManyMenu>
+                <p:selectManyMenu id="empresaSemCurso" value="#{trabalhadorCadastroWebBean.trabalhadorDTO.idCursos}"
+                                 styleClass="form-select"
+                                 rendered="#{trabalhadorCadastroWebBean.cursosByEmpresa.size() lt 1 and trabalhadorCadastroWebBean.empresaSelecinada}">
+                    <f:selectItem itemDisabled="true" itemValue="#{null}" itemLabel="#{'Não há cursos para essa empresa'}"/>
+                </p:selectManyMenu>
+                <p:selectManyMenu id="cursos" value="#{trabalhadorCadastroWebBean.trabalhadorDTO.idCursos}"
+                                 styleClass="form-select"
+                                 rendered="#{trabalhadorCadastroWebBean.cursosByEmpresa.size() gt 0}">
+                    <f:selectItems value="#{trabalhadorCadastroWebBean.cursosByEmpresa}" var="curso"
+                                   itemValue="#{curso.id}"
+                                   itemLabel="#{curso.apelido}"/>
+                </p:selectManyMenu>
+                <h:message for="cursos" styleClass="form-text text-danger"/>
+            </h:panelGroup>
+            <h:commandButton styleClass="btn btn-success mt-3" id="salvar" value="Salvar" process="@form"
+                             action="#{trabalhadorCadastroWebBean.cadastrar()}"/>
+        </h:form>
+    </ui:define>
+</ui:composition>
+</html>

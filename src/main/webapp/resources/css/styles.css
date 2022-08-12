@@ -1,0 +1,46 @@
+.footer {
+    position: absolute!important;
+    bottom: 0!important;
+    width: 100% !important;
+}
+
+.body {
+    margin-top: 6rem!important;
+}
+
+.panelGrid {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    border: 1px solid #cbcbcb;
+    border-radius: 5px;
+    padding: 10px;
+    box-shadow: 5px 5px 5px -1px rgba(0,0,0,0.07);
+    position: center;
+}
+
+.panelGrid thead {
+    font-size: 2rem;
+    color: #5e5e5e;
+    position: relative;
+    right: 35%;
+    margin-bottom: 30px;
+}
+
+.panelGrid label {
+    font-weight: bold;
+    color: #5e5e5e;
+    font-family: "Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+}
+
+.panelGrid tfoot {
+    order: 1;
+}
+
+.img-logo {
+    width: 400px;
+    position: absolute;
+    top: 0;
+    left: 0;
+}

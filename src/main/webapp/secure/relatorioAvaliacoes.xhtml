@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+>
+<ui:composition template="../template/basic_layout.xhtml">
+    <ui:define name="title">Relatório Avaliações</ui:define>
+    <ui:define name="content">
+        <h:panelGroup styleClass="card border-secondary mb-3">
+            <h:panelGroup styleClass="card-header">Resumo</h:panelGroup>
+            <h:panelGroup styleClass="card-body">
+                <p>
+                    Quantidade de avaliações: <b>#{relatorioAvaliacoesWebBean.quantidadeAvaliacoes}</b>
+                </p>
+                <p>
+                    Quantidade de cursos: <b>#{relatorioAvaliacoesWebBean.quantidadeCursos}</b>
+                </p>
+                <p>
+                    Quantidade de trabalhadores: <b>#{relatorioAvaliacoesWebBean.quantidadeTrabalhadores}</b>
+                </p>
+                <p>
+                    Média de trabalhadores por curso:
+                    <b>#{relatorioAvaliacoesWebBean.quantidadeTrabalhadores/relatorioAvaliacoesWebBean.quantidadeCursos}</b>
+                </p>
+                <p>
+                    Média de cursos por empresa:
+                    <b>#{relatorioAvaliacoesWebBean.quantidadeCursos/relatorioAvaliacoesWebBean.empresas.size()}</b>
+                </p>
+            </h:panelGroup>
+        </h:panelGroup>
+
+        <ui:repeat value="#{relatorioAvaliacoesWebBean.empresas}" var="empresa">
+            <h:panelGroup styleClass="card border-secondary mb-3">
+                <h:panelGroup styleClass="card-header">#{empresa.nome}</h:panelGroup>
+                <h:panelGroup styleClass="card-body">
+                    <div class="accordion" id="cursos">
+                        <ui:repeat value="#{empresa.cursos}" var="curso">
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id='#{curso.apelido.replaceAll("[^a-zA-Z0-9]", "")}'>
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                            data-bs-target='##{curso.nome.replaceAll("[^a-zA-Z0-9]", "")}'
+                                            aria-expanded="false"
+                                            aria-controls='#{curso.nome.replaceAll("[^a-zA-Z0-9]", "")}'>
+                                        Curso: #{curso.nome}
+                                    </button>
+                                </h2>
+                                <div id='#{curso.nome.replaceAll("[^a-zA-Z0-9]", "")}'
+                                     class="accordion-collapse collapse"
+                                     aria-labelledby='#{curso.apelido.replaceAll("[^a-zA-Z0-9]", "")}'
+                                     data-bs-parent="#cursos">
+                                    <div class="accordion-body">
+                                        <div class="accordion" id="modulos">
+                                            <ui:repeat value="#{curso.modulos}" var="modulo">
+                                                <div class="accordion-item">
+                                                    <h2 class="accordion-header"
+                                                        id='#{modulo.nome.replaceAll("[^a-zA-Z0-9]", "")}#{modulo.id}'>
+                                                        <button class="accordion-button collapsed" type="button"
+                                                                data-bs-toggle="collapse"
+                                                                data-bs-target='##{modulo.nome.replaceAll("[^a-zA-Z0-9]", "")}'
+                                                                aria-expanded="false"
+                                                                aria-controls='#{modulo.nome.replaceAll("[^a-zA-Z0-9]", "")}'>
+                                                            Módulo: #{modulo.nome} - Avaliação ID #{modulo.avaliacao.id}
+                                                        </button>
+                                                    </h2>
+                                                    <div id='#{modulo.nome.replaceAll("[^a-zA-Z0-9]", "")}'
+                                                         class="accordion-collapse collapse"
+                                                         aria-labelledby='#{modulo.nome.replaceAll("[^a-zA-Z0-9]", "")}#{modulo.id}'
+                                                         data-bs-parent="#modulos">
+                                                        <div class="accordion-body">
+                                                            <p>
+                                                                Trabalhadores:
+                                                                <b>#{modulo.curso.trabalhadores.size()}</b>
+                                                            </p>
+                                                            <p>
+                                                                Nota média:
+                                                                <b>#{relatorioAvaliacoesWebBean.calculaNotaMedia(modulo.avaliacao.notas)}</b>
+                                                            </p>
+                                                            <p>
+                                                                Nota máxima:
+                                                                <b>#{relatorioAvaliacoesWebBean.calculaNotaMaxima(modulo.avaliacao.notas)}</b>
+                                                            </p>
+                                                            <p>
+                                                                Nota mínima:
+                                                                <b>#{relatorioAvaliacoesWebBean.calculaNotaMinima(modulo.avaliacao.notas)}</b>
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </ui:repeat>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </ui:repeat>
+                    </div>
+                </h:panelGroup>
+            </h:panelGroup>
+        </ui:repeat>
+        <h:form>
+            <h:commandButton styleClass="btn btn-success col-12" id="imprimir" value="Imprimir"
+                             action="#{relatorioAvaliacoesWebBean.imprimir()}">
+            </h:commandButton>
+        </h:form>
+    </ui:define>
+</ui:composition>
+</html>
